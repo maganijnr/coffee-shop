@@ -16,7 +16,7 @@ interface IProps {
 	id: string;
 	index: number;
 	type: string;
-	rosted: string;
+	roasted: string;
 	imagelink_square: any;
 	special_ingredient: string;
 	average_rating: number;
@@ -31,7 +31,7 @@ const CoffeeCard: FC<IProps> = ({
 	id,
 	index,
 	type,
-	rosted,
+	roasted,
 	imagelink_square,
 	special_ingredient,
 	average_rating,
@@ -62,7 +62,21 @@ const CoffeeCard: FC<IProps> = ({
 					<Text style={styles.DollarTxt}>$</Text>
 					{prices[0].price}
 				</Text>
-				<TouchableOpacity style={styles.AddToCartBtn} onPress={() => {}}>
+				<TouchableOpacity
+					style={styles.AddToCartBtn}
+					onPress={() => {
+						buttomPressEnter({
+							id,
+							index,
+							type,
+							roasted,
+							imagelink_square,
+							name,
+							special_ingredient,
+							prices: [{ ...prices, quantity: 1 }],
+						});
+					}}
+				>
 					<AntDesign
 						name="plus"
 						size={FONTSIZE.size_18}

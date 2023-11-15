@@ -64,24 +64,21 @@ export const useStore = create(
 			calculateCartPrice: () =>
 				set(
 					produce((state) => {
-						let totalPrice = 0;
-
+						let totalprice = 0;
 						for (let i = 0; i < state.CartList.length; i++) {
-							let tempPrice = 0;
-
+							let tempprice = 0;
 							for (let j = 0; j < state.CartList[i].prices.length; j++) {
-								tempPrice =
-									tempPrice +
-									parseFloat(state.CartList[i].prices[j]) *
-										state.CartList[i].quantity;
+								tempprice =
+									tempprice +
+									parseFloat(state.CartList[i].prices[j].price) *
+										state.CartList[i].prices[j].quantity;
 							}
-							state.CartList[i].ItemPrice = tempPrice
+							state.CartList[i].ItemPrice = tempprice
 								.toFixed(2)
 								.toString();
-							totalPrice = totalPrice + tempPrice;
+							totalprice = totalprice + tempprice;
 						}
-
-						state.CartPrice = totalPrice.toFixed(2).toString();
+						state.CartPrice = totalprice.toFixed(2).toString();
 					})
 				),
 

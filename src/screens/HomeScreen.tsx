@@ -57,6 +57,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 	const CoffeeList = useStore((state: any) => state.CoffeeList);
 	const BeanList = useStore((state: any) => state.BeanList);
 	const ListRef: any = useRef<FlatList>();
+	const addToCart = useStore((state: any) => state.addToCart);
+	const calculateCartPrice = useStore(
+		(state: any) => state.calculateCartPrice
+	);
 
 	const [categories, setCategories] = useState([
 		...getCategorieFromData(CoffeeList),
@@ -98,6 +102,29 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 		setSortedCoffee([...CoffeeList]);
 
 		setSearchText("");
+	};
+
+	const CoffeCardAddToCart = ({
+		id,
+		index,
+		name,
+		roasted,
+		imagelink_square,
+		special_ingredient,
+		type,
+		prices,
+	}: any) => {
+		addToCart({
+			id,
+			index,
+			name,
+			roasted,
+			imagelink_square,
+			special_ingredient,
+			type,
+			prices,
+		});
+		calculateCartPrice();
 	};
 
 	return (
@@ -237,10 +264,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 									imagelink_square={item.imagelink_square}
 									type={item.type}
 									prices={item.prices}
-									rosted={item.rosted}
+									roasted={item.roasted}
 									special_ingredient={item.special_ingredient}
 									key={item.id}
-									buttomPressEnter={() => {}}
+									buttomPressEnter={CoffeCardAddToCart}
 									index={categoryIndex.index}
 								/>
 							</TouchableOpacity>
@@ -280,10 +307,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 									imagelink_square={item.imagelink_square}
 									type={item.type}
 									prices={item.prices}
-									rosted={item.rosted}
+									roasted={item.roasted}
 									special_ingredient={item.special_ingredient}
 									key={item.id}
-									buttomPressEnter={() => {}}
+									buttomPressEnter={CoffeCardAddToCart}
 									index={categoryIndex.index}
 								/>
 							</TouchableOpacity>

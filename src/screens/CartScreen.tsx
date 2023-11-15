@@ -1,13 +1,22 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
+	TouchableOpacity,
+} from "react-native";
 import React from "react";
-import { COLORS } from "../theme/theme";
+import { COLORS, SPACING } from "../theme/theme";
 import { StatusBar } from "expo-status-bar";
 import HeaderBar from "../components/HeaderBar";
 import { useStore } from "../store/store";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import EmptyListAnimation from "../components/EmptyListAnimation";
+import PaymentFooter from "../components/PaymentFooter";
+import CartItem from "../components/CartItem";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const CartScreen = () => {
+const CartScreen = ({ navigation, route }: any) => {
 	const cartItems = useStore((state: any) => state.CartList);
 
 	const cartPrice = useStore((state: any) => state.CartPrice);
@@ -17,8 +26,28 @@ const CartScreen = () => {
 	const decrementCartItemQuantity = useStore(
 		(state: any) => state.decrementCartItemQuantity
 	);
+	const calculateCartPrice = useStore(
+		(state: any) => state.calculateCartPrice
+	);
 
 	const tabBarHeight = useBottomTabBarHeight();
+
+	const buttonPressHandler = async () => {
+		navigation.push("Payment");
+		AsyncStorage.getAllKeys()
+			.then((keys) => AsyncStorage.multiRemove(keys))
+			.then(() => console.log("success"));
+	};
+
+	const incrementCartItemQuantityHandler = (id: string, size: string) => {
+		incrementCartItemQuantity(id, size);
+		calculateCartPrice();
+	};
+
+	const decrementCartItemQuantityHandler = (id: string, size: string) => {
+		decrementCartItemQuantity(id, size);
+		calculateCartPrice();
+	};
 
 	return (
 		<View style={styles.ScreenContainer}>
@@ -43,11 +72,48 @@ const CartScreen = () => {
 						<HeaderBar title="Cart" />
 
 						{cartItems?.length === 0 ? (
-							<EmptyListAnimation title="Cart is empty" />
+							<View
+								style={{
+									flex: 1,
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+							>
+								<EmptyListAnimation title="Cart is empty" />
+							</View>
 						) : (
-							<EmptyListAnimation title="Cart is empty" />
+							<View style={styles.ListItemContainer}>
+								{cartItems.map((data: any) => (
+									<TouchableOpacity onPress={() => {}} key={data.id}>
+										<CartItem
+											id={data.id}
+											name={data.name}
+											imagelink_square={data.imagelink_square}
+											special_ingredient={data.special_ingredient}
+											roasted={data.roasted}
+											prices={data.prices}
+											type={data.type}
+											incrementCartItemQuantityHandler={
+												incrementCartItemQuantityHandler
+											}
+											decrementCartItemQuantityHandler={
+												decrementCartItemQuantityHandler
+											}
+										/>
+									</TouchableOpacity>
+								))}
+							</View>
 						)}
 					</View>
+					{cartItems.length !== 0 ? (
+						<PaymentFooter
+							buttonTitle="Pay"
+							price={{ price: cartPrice, currency: "$" }}
+							buttonPressHandler={buttonPressHandler}
+						/>
+					) : (
+						<></>
+					)}
 				</View>
 			</ScrollView>
 		</View>
@@ -70,5 +136,10 @@ const styles = StyleSheet.create({
 	},
 	ItemContainer: {
 		flex: 1,
+	},
+	ListItemContainer: {
+		paddingHorizontal: SPACING.space_20,
+		gap: SPACING.space_20,
+		paddingVertical: SPACING.space_20,
 	},
 });

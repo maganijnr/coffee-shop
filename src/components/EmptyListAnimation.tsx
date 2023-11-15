@@ -8,6 +8,9 @@ interface IProps {
 }
 
 const EmptyListAnimation: React.FC<IProps> = ({ title }) => {
+	const video = React.useRef(null);
+	const [status, setStatus] = React.useState({});
+
 	return (
 		<View style={styles.EmptyStateView}>
 			<LottieView
@@ -26,12 +29,13 @@ export default EmptyListAnimation;
 const styles = StyleSheet.create({
 	EmptyStateView: {
 		flex: 1,
-		justifyContent: "center",
+		// justifyContent: "center",
 		alignItems: "center",
 	},
 
 	LottieStyleView: {
-		height: 300,
+		height: 400,
+		width: 400,
 	},
 
 	LottieText: {
