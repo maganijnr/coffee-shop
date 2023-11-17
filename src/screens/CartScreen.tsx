@@ -4,6 +4,7 @@ import {
 	Text,
 	View,
 	TouchableOpacity,
+	Platform,
 } from "react-native";
 import React from "react";
 import { COLORS, SPACING } from "../theme/theme";
@@ -34,9 +35,6 @@ const CartScreen = ({ navigation, route }: any) => {
 
 	const buttonPressHandler = async () => {
 		navigation.push("Payment");
-		AsyncStorage.getAllKeys()
-			.then((keys) => AsyncStorage.multiRemove(keys))
-			.then(() => console.log("success"));
 	};
 
 	const incrementCartItemQuantityHandler = (id: string, size: string) => {
@@ -79,7 +77,12 @@ const CartScreen = ({ navigation, route }: any) => {
 									justifyContent: "center",
 								}}
 							>
-								<EmptyListAnimation title="Cart is empty" />
+								{Platform.OS === "ios" && (
+									<EmptyListAnimation title="Cart is empty" />
+								)}
+								{Platform.OS === "android" && (
+									<Text>Cart is empty</Text>
+								)}
 							</View>
 						) : (
 							<View style={styles.ListItemContainer}>
