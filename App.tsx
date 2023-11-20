@@ -1,9 +1,8 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 //Screens
-import HomeScreen from "./src/screens/HomeScreen";
 import PaymentScreen from "./src/screens/PaymentScreen";
 import DetailsScreen from "./src/screens/DetailsScreen";
 import TabNavigator from "./src/navigators/TabNavigator";
